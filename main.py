@@ -1,3 +1,5 @@
+from quiz import Quiz 
+
 def show_menu():
     print("=================================")
     print("            롤토체스 퀴즈            ")
@@ -46,7 +48,22 @@ def main():
             continue
 
         if choice == 1:
-            print("퀴즈 풀기 기능 (아직 구현 안됨)")
+            q = Quiz(
+                "정답은 1번 ",
+                ["일", "이", "삼", "사"],
+                1
+            )
+
+            q.show()
+
+            answer = int(input("정답: "))
+
+            if q.check_answer(answer):
+                print("정답!")
+            else:
+                print("오답!")
+
+
         elif choice == 2:
             print("퀴즈 추가 기능 (아직 구현 안됨)")
         elif choice == 3:
