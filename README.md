@@ -12,7 +12,7 @@
 
 ## 6. 데이터 파일 설명
 
-## 7. 구현 방법 
+## 7. 구현 순서
 
 ### 7-1. Git 저장소 설정
 ```bash 
@@ -50,10 +50,44 @@ branch 'main' set up to track 'origin/main'.
 
 ### 7-2. 메뉴 기능 만들기
 
+#### - 입력 예외 처리 추가
+
 #### - 변경사항 커밋 및 푸시
 ```bash
+% git pull 
 % git add .
 % git commit -m "feat: Quiz 클래스 구현" -m "- Quiz.py 생성
 dquote> - main.py에 퀴즈 출력 테스트 코드 추가"
 % git push
 ```
+
+<br>
+
+### 7-3. Quiz 클래스 생성
+
+#### - 기본 퀴즈 데이터 작성
+
+<br>
+
+### 7-4. 퀴즈 풀기 기능 추가
+
+#### - 브랜치 추가 및 병합 
+```bash
+% git checkout -b feature/play-quiz
+git add .
+git commit -m "Feat: 퀴즈 풀기 기능 구현"
+
+git checkout main
+git merge feature/play-quiz
+git push
+```
+<p>
+<img width="613" height="142" alt="Screenshot 2026-04-06 at 1 19 30 PM" src="https://github.com/user-attachments/assets/cb8c59a6-dc70-4bd3-a397-2733d41ed088" />
+</p><br>
+
+### 7-5. 퀴즈 추가 기능 추가
+
+#### - JSON 파일이 손상되었을 때 메시지 출력, 기본 퀴즈 데이터로 초기화 
+<p>
+<img width="936" height="429" alt="Screenshot 2026-04-06 at 3 05 33 PM" src="https://github.com/user-attachments/assets/5fa5dd82-cc4e-4f0a-a7b8-c85d145c4587" />
+</p><br>
