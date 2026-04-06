@@ -22,7 +22,7 @@ def show_menu():
     print("=================================")
 
 
-def get_user_input():
+def get_menu_input():
     try:
         user_input = input("선택: ").strip()            # 앞뒤 공백 제거
 
@@ -44,66 +44,55 @@ def get_user_input():
     except ValueError:
         print("숫자를 입력해주세요.\n")
         return None
+    
+
+def get_number_input(prompt, min_value, max_value):
+    while True:
+        user_input = input(prompt).strip()
+
+        if user_input == "":
+            print("입력이 비어있습니다.")
+            continue
+
+        try:
+            value = int(user_input)
+
+            if value < min_value or value > max_value:
+                print(f"{min_value}~{max_value} 사이 숫자를 입력하세요.")
+                continue
+
+            return value
+
+        except ValueError:
+            print("숫자를 입력하세요.")
+
+
+def get_text_input(prompt):
+    while True:
+        text = input(prompt).strip()
+
+        if text == "":
+            print("입력이 비어있습니다.")
+            continue
+
+        return text
 
 
 def main():
     while True:
         show_menu()
 
-        choice = get_user_input()
+        choice = get_menu_input()
 
         if choice is None:
             continue
 
         if choice == 1:
-            # 퀴즈가 없는 경우 처리
-            if not quizzes:
-                print("등록된 퀴즈가 없습니다.")
-                continue
-
-            print(f"\n퀴즈를 시작합니다! (총 {len(quizzes)}문제)\n")
-
-            score = 0
-
-            for idx, quiz in enumerate(quizzes, 1):
-                print("---------------------------------")
-                print(f"[문제 {idx}]")
-
-                quiz.show()
-
-                # 입력 처리 
-                while True:
-                    user_input = input("정답 입력 (1~4): ").strip()
-
-                    if user_input == "":
-                        print("입력이 비어있습니다.")
-                        continue
-
-                    try:
-                        answer = int(user_input)
-                        if answer < 1 or answer > 4:
-                            print("1~4 사이 숫자를 입력하세요.")
-                            continue
-                        break
-                    except ValueError:
-                        print("숫자를 입력하세요.")
-
-                # 정답 체크
-                if quiz.check_answer(answer):
-                    print("\nO 정답입니다!")
-                    score += 1
-                else:
-                    print(f"\nX 오답입니다! (정답: {quiz.answer})")
-
-            # 결과 출력
-            print("=================================")
-            print(f"결과: {len(quizzes)}문제 중 {score}문제 정답!")
-            print(f"점수: {int(score / len(quizzes) * 100)}점")
-            print("=================================")
-
+            play_quiz()
 
         elif choice == 2:
-            print("퀴즈 추가 기능 (아직 구현 안됨)")
+            add_quiz()
+
         elif choice == 3:
             print("퀴즈 목록 기능 (아직 구현 안됨)")
         elif choice == 4:
@@ -114,6 +103,58 @@ def main():
 
         input("\n엔터를 누르면 메뉴로 돌아갑니다...")
 
+
+def play_quiz():
+    # 퀴즈가 없는 경우 처리
+    if not quizzes:
+        print("등록된 퀴즈가 없습니다.")
+        return
+
+    print(f"\n퀴즈를 시작합니다! (총 {len(quizzes)}문제)\n")
+
+    score = 0
+
+    for idx, quiz in enumerate(quizzes, 1):
+        print("---------------------------------")
+        print(f"[문제 {idx}]")
+
+        quiz.show()
+
+        # 입력 처리 
+        answer = get_number_input("정답 입력 (1~4): ", 1, 4)
+
+        # 정답 체크
+        if quiz.check_answer(answer):
+            print("\nO 정답입니다!")
+            score += 1
+        else:
+            print(f"\nX 오답입니다! (정답: {quiz.answer})")
+
+    # 결과 출력
+    print("=================================")
+    print(f"결과: {len(quizzes)}문제 중 {score}문제 정답!")
+    print(f"점수: {int(score / len(quizzes) * 100)}점")
+    print("=================================")
+
+
+def add_quiz():
+    print("---------------------------------")
+    print("새로운 퀴즈를 추가합니다.\n")
+
+    question = get_text_input("문제를 입력하세요: ")
+
+    choices = []
+    for i in range(4):
+        choice_text = get_text_input(f"선택지 {i+1}: ")
+        choices.append(choice_text)
+
+    answer = get_number_input("정답 번호 (1~4): ", 1, 4)
+
+    new_quiz = Quiz(question, choices, answer)
+    quizzes.append(new_quiz)
+
+    print("\n퀴즈가 추가되었습니다!")
+    
 
 if __name__ == "__main__":
     try:
