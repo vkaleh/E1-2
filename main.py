@@ -56,20 +56,50 @@ def main():
             continue
 
         if choice == 1:
-            q = Quiz(
-                "정답은 1번 ",
-                ["일", "이", "삼", "사"],
-                1
-            )
+            # 퀴즈가 없는 경우 처리
+            if not quizzes:
+                print("등록된 퀴즈가 없습니다.")
+                continue
 
-            q.show()
+            print(f"\n퀴즈를 시작합니다! (총 {len(quizzes)}문제)\n")
 
-            answer = int(input("정답: "))
+            score = 0
 
-            if q.check_answer(answer):
-                print("정답!")
-            else:
-                print("오답!")
+            for idx, quiz in enumerate(quizzes, 1):
+                print("---------------------------------")
+                print(f"[문제 {idx}]")
+
+                quiz.show()
+
+                # 입력 처리 
+                while True:
+                    user_input = input("정답 입력 (1~4): ").strip()
+
+                    if user_input == "":
+                        print("입력이 비어있습니다.")
+                        continue
+
+                    try:
+                        answer = int(user_input)
+                        if answer < 1 or answer > 4:
+                            print("1~4 사이 숫자를 입력하세요.")
+                            continue
+                        break
+                    except ValueError:
+                        print("숫자를 입력하세요.")
+
+                # 정답 체크
+                if quiz.check_answer(answer):
+                    print("\nO 정답입니다!")
+                    score += 1
+                else:
+                    print(f"\nX 오답입니다! (정답: {quiz.answer})")
+
+            # 결과 출력
+            print("=================================")
+            print(f"결과: {len(quizzes)}문제 중 {score}문제 정답!")
+            print(f"점수: {int(score / len(quizzes) * 100)}점")
+            print("=================================")
 
 
         elif choice == 2:
