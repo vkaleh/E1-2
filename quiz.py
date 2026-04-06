@@ -10,4 +10,17 @@ class Quiz:
             print(f"{i}. {choice}")
 
     def check_answer(self, user_input):
-        return user_input == self.answer
+        return user_input == self.answe
+    
+    # 객체 상태를 딕셔너리로 변환 (JSON 저장용)
+    def to_dict(self):
+        return {
+            "question": self.question,
+            "choices": self.choices,
+            "answer": self.answer
+        }
+    
+    # 딕셔너리 데이터를 기반으로 객체 생성 (JSON 불러오기용)
+    @classmethod
+    def from_dict(cls, data):
+        return cls(data["question"], data["choices"], data["answer"])
