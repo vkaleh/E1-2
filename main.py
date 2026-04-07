@@ -137,7 +137,8 @@ def main():
             add_quiz()
 
         elif choice == 3:
-            print("퀴즈 목록 기능 (아직 구현 안됨)")
+            view_quizzes()
+
         elif choice == 4:
             print("점수 확인 기능 (아직 구현 안됨)")
         elif choice == 5:
@@ -198,6 +199,18 @@ def add_quiz():
 
     save_quizzes(quizzes)
     print("\n퀴즈가 추가되었습니다!")
+
+
+def view_quizzes():
+    if not quizzes:
+        print("등록된 퀴즈가 없습니다.\n")
+        return
+    
+    print("\n=========저장된 퀴즈 목록=========")
+    print(f"총 {len(quizzes)}개\n")
+    for idx, quiz in enumerate(quizzes, 1):
+        print(f"[{idx}] {quiz.question}\n")
+    print("=================================")
 
 
 if __name__ == "__main__":
