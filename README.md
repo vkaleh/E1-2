@@ -1,14 +1,41 @@
 # Git과 함께하는 Python 첫 발자국 
 
 ## 1. 프로젝트 개요
+Python 콘솔 환경에서 동작하는 퀴즈 게임을 구현하는 프로젝트로, 
+JSON을 활용한 데이터 관리, 객체지향 설계, Git을 활용한 버전 관리를 경험한다.
+
 
 ## 2. 퀴즈 주제, 선정 이유
+**롤토체스(TFT)**
+
+개인적으로 관심 있는 게임을 주제로 선택하여 학습 동기를 높였다.
 
 ## 3. 실행 방법
+Python version : 3.12.13
+
+```bash
+% git clone ....git
+% cd E1-2
+% python main.py
+```
 
 ## 4. 기능 목록
+- 퀴즈 풀기
+- 퀴즈 추가
+- 퀴즈 목록 확인
+- 점수 확인
+- 종료하기 
 
 ## 5. 파일 구조
+
+```bash
+E1-2
+├── main.py              # 메인 파일
+├── quiz_game.py         # QuizGame 클래스
+├── quiz.py              # Quiz 클래스
+├── state.json           # 퀴즈 데이터 및 점수
+└── README.md
+```
 
 ## 6. 데이터 파일 설명
 
@@ -91,3 +118,57 @@ git push
 <p>
 <img width="936" height="429" alt="Screenshot 2026-04-06 at 3 05 33 PM" src="https://github.com/user-attachments/assets/5fa5dd82-cc4e-4f0a-a7b8-c85d145c4587" />
 </p><br>
+
+### 7-6. 퀴즈 목록 확인 기능 추가
+
+### 7-7. 점수 확인 기능 추가
+
+### 7-8. QuizGame 클래스로 리팩토링
+
+변경 전 : 함수 기반 구조 
+```bash
+def load_quizzes():
+    pass
+
+def save_quizzes():
+    pass
+
+def play_quiz():
+    pass
+```
+
+<br>
+
+변경 후 : 클래스 기반 구조
+```bash
+class QuizGame:
+    def __init__(self):
+        pass
+    
+    def load_quizzes(self):
+        pass
+    
+    def save_quizzes(self):
+        pass
+    
+    def play_quiz(self):
+        pass
+    
+    def run(self):
+        pass
+```
+
+**주요 개선사항**<br>
+객체지향 설계: 전역변수를 클래스 변수로 변경<br>
+캡슐화: 게임 로직을 run() 메서드로 통합<br>
+자동화: 데이터 로드/저장을 __init__과 save_quizzes()로 자동화<br>
+재사용성: 게임 객체를 다른 곳에서도 재사용 가능<br>
+
+## 8. 보충 설명 
+
+### - [git push] VS [git push origin main]
+- **git push** <br>
+  미리 연결된 곳으로 푸시. 맨 처음에 git push -u origin main을 해두었다면
+  그 다음부터는 git push만 해도 origin main으로 감 
+- **git push origin main** <br>
+  origin 이라는 서버의 main 브랜치로 보냄. 어느 브랜치에 있든 상관없이 명확하게 타겟을 지정하므로 실수 방지 
