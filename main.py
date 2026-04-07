@@ -14,6 +14,8 @@ DEFAULT_QUIZZES = [
     Quiz("비취 시너지의 특징으로 올바른 것은?", ["조각상은 그 자리에서 공격을 한다", "조각상 주변 유닛만 버프를 받는다", "조각상은 라운드마다 위치가 랜덤이다", "조각상은 파괴되지 않는다"], 2),
 ]
 
+quizzes = []
+
 # 현재 quizzes 리스트를 JSON 파일로 저장 
 def save_quizzes(quizzes):
     try:
@@ -117,7 +119,8 @@ def get_text_input(prompt):
 
 
 def main():
-    quizzes = load_quizzes()    
+    global quizzes 
+    quizzes = load_quizzes() or DEFAULT_QUIZZES
 
     while True:
         show_menu()

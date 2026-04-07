@@ -10,7 +10,7 @@ class Quiz:
             print(f"{i}. {choice}")
 
     def check_answer(self, user_input):
-        return user_input == self.answe
+        return user_input == self.answer
     
     # 객체 상태를 딕셔너리로 변환 (JSON 저장용)
     def to_dict(self):
