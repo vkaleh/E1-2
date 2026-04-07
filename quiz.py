@@ -1,8 +1,9 @@
 class Quiz:
-    def __init__(self, question, choices, answer):
+    def __init__(self, question, choices, answer, hint):
         self.question = question
         self.choices = choices  # 리스트
         self.answer = answer    # 정답 번호 (1~4)
+        self.hint = hint
 
     def show(self):
         print(f"\n{self.question}")

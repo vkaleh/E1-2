@@ -12,11 +12,11 @@ class QuizGame:
 
     # 기본 퀴즈 데이터 (state.json이 없을 때 사용)
     DEFAULT_QUIZZES = [
-        Quiz("시너지 ‘혁신가'에서 소환되는 기계는 단계별로 강화된다. \n다음 중 혁신가 7 시너지 효과로 등장하는 유닛은?", ["기계 곰", "T-Hex", "기계 드래곤", "기계 풍뎅이"], 3),
-        Quiz("시즌 7에서 용 특성의 숨겨진 룰로 맞는 것은?", ["용 유닛은 2칸을 차지한다", "용 유닛은 아이템을 4개까지 장착 가능하다", "용 유닛은 시너지 효과를 받지 않는다", "동일한 드래곤은 2마리까지 배치 가능하다"], 1),
-        Quiz("다음 중 아이템 조합 결과가 올바른 것은?", ["곡궁 + 곡궁 -> 거인의 결의", "BF 대검 + 곡궁 -> 거인 학살자", "쓸데없이 큰 지팡이 + 여신의 눈물 -> 쇼친의 창", "체인 조끼 + 망토 -> 정령의 형상"], 2),
-        Quiz("시즌 4의 선택받은 자 시스템에서 맞는 설명은?", ["선택받은 자는 추가 시너지를 제공하지 않는다", "둘 이상의 선택받은 자를 얻을 수 있다", "선택받은 자는 상점에 동시에 2개가 등장할 수 있다", "선택받은 자는 항상 2성으로 등장한다"], 4),
-        Quiz("비취 시너지의 특징으로 올바른 것은?", ["조각상은 그 자리에서 공격을 한다", "조각상 주변 유닛만 버프를 받는다", "조각상은 라운드마다 위치가 랜덤이다", "조각상은 파괴되지 않는다"], 2),
+        Quiz("시너지 ‘혁신가'에서 소환되는 기계는 단계별로 강화된다. \n다음 중 혁신가 7 시너지 효과로 등장하는 유닛은?", ["기계 곰", "T-Hex", "기계 드래곤", "기계 풍뎅이"], 3, "혁신가 시너지의 최종 단계로, 가장 거대하고 강력한 존재감을 뽐내는 생명체."),
+        Quiz("시즌 7에서 용 특성의 숨겨진 룰로 맞는 것은?", ["용 유닛은 2칸을 차지한다", "용 유닛은 아이템을 4개까지 장착 가능하다", "용 유닛은 시너지 효과를 받지 않는다", "동일한 드래곤은 2마리까지 배치 가능하다"], 1, "용은 크기가 큽니다."),
+        Quiz("다음 중 아이템 조합 결과가 올바른 것은?", ["곡궁 + 곡궁 -> 거인의 결의", "BF 대검 + 곡궁 -> 거인 학살자", "쓸데없이 큰 지팡이 + 여신의 눈물 -> 쇼친의 창", "체인 조끼 + 망토 -> 정령의 형상"], 2, "힌트가 없습니다."),
+        Quiz("시즌 4의 선택받은 자 시스템에서 맞는 설명은?", ["선택받은 자는 추가 시너지를 제공하지 않는다", "둘 이상의 선택받은 자를 얻을 수 있다", "선택받은 자는 상점에 동시에 2개가 등장할 수 있다", "선택받은 자는 항상 2성으로 등장한다"], 4, "선받자는 상점에서 구매하자마자 즉시 필드에 투입하는 용도로 많이 쓰입니다."),
+        Quiz("비취 시너지의 특징으로 올바른 것은?", ["조각상은 그 자리에서 공격을 한다", "조각상 주변 유닛만 버프를 받는다", "조각상은 라운드마다 위치가 랜덤이다", "조각상은 파괴되지 않는다"], 2, "비취 시너지의 특징과 비슷합니다."),
     ]
 
 
@@ -58,7 +58,7 @@ class QuizGame:
         try:
             data = {
                 "quizzes": [q.to_dict() for q in self.quizzes],
-                "best_score": self.best_score    
+                "best_score": self.best_score, 
             }
             with open(self.DB_FILE, "w", encoding="utf-8") as f:
                 json.dump(data, f, ensure_ascii=False, indent=4)
@@ -135,7 +135,7 @@ class QuizGame:
             return None
         
 
-    def get_number_input(self, prompt, min_value, max_value):
+    def get_number_input(self, prompt, min_value, max_value, allow_hint = False):
         while True:
             user_input = input(prompt).strip()
 
@@ -145,6 +145,10 @@ class QuizGame:
 
             try:
                 value = int(user_input)
+
+                # 힌트 기능이 활성화되고 0을 입력한 경우
+                if allow_hint and value == 0:
+                    return 0  # 0을 반환하면 play_quiz에서 처리
 
                 if value < min_value or value > max_value:
                     print(f"{min_value}~{max_value} 사이 숫자를 입력하세요.")
@@ -188,7 +192,8 @@ class QuizGame:
         # 선택한 문제 수만큼만 추출
         selected_quizzes = shuffled_quizzes[:num_problems]
 
-        score = 0
+        score = 0.0
+        hint_used = False  # 힌트 사용 여부 추적
 
         for idx, quiz in enumerate(selected_quizzes, 1):
             print("---------------------------------")
@@ -197,14 +202,32 @@ class QuizGame:
             quiz.show()
 
             # 입력 처리 
-            answer = self.get_number_input("정답 입력 (1~4): ", 1, 4)
+            answer = self.get_number_input(
+                "정답 입력 (1~4) (힌트는 0): ", 1, 4, allow_hint = True)
+            
+            # 힌트 요청 처리
+            if answer == 0:
+                hint_used = True
+                print(f"\n힌트: {quiz.hint}") 
 
+                # 다시 입력받기
+                answer = self.get_number_input("정답 입력 (1~4): ", 1, 4)
+
+            points_earned = 0
             # 정답 체크
             if quiz.check_answer(answer):
+                
+                if hint_used:
+                    points_earned = 0.5 # 힌트 사용 시 0.5 획득
+                    hint_used = False   # 초기화
+                else:
+                    points_earned = 1.0 # 힌트 미사용 시 1 획득
+                
                 print("\nO 정답입니다!")
-                score += 1
+                score += points_earned        
             else:
                 print(f"\nX 오답입니다! (정답: {quiz.answer})")
+            print(f"(+{int(points_earned / num_problems * 100)}점 | 현재 점수: {int(score / num_problems * 100)}점)")
 
         # 점수 계산
         percentage = int(score / num_problems * 100)
@@ -236,7 +259,12 @@ class QuizGame:
 
         answer = self.get_number_input("정답 번호 (1~4): ", 1, 4)
 
-        new_quiz = Quiz(question, choices, answer)
+        # 힌트 입력하기
+        hint = self.get_text_input("힌트를 입력하세요: ")
+        if not hint:
+            hint = "힌트가 없습니다."
+
+        new_quiz = Quiz(question, choices, answer, hint)
         self.quizzes.append(new_quiz)
 
         self.save_quizzes()
