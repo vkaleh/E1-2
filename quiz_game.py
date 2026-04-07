@@ -171,17 +171,26 @@ class QuizGame:
         if not self.quizzes:
             print("등록된 퀴즈가 없습니다.")
             return
+        
+        # 풀 문제 수를 사용자로부터 입력받기
+        num_problems = self.get_number_input(
+            f"\n풀 문제 수를 입력하세요 (1~{len(self.quizzes)}): ",
+            min_value=1,
+            max_value=len(self.quizzes)
+        )
 
-        print(f"\n퀴즈를 시작합니다! (총 {len(self.quizzes)}문제)\n")
+        print(f"\n퀴즈를 시작합니다! (총 {num_problems}문제)\n")
 
         # 문제 순서를 랜덤하게 섞기
         shuffled_quizzes = self.quizzes.copy()
         random.shuffle(shuffled_quizzes)
 
+        # 선택한 문제 수만큼만 추출
+        selected_quizzes = shuffled_quizzes[:num_problems]
 
         score = 0
 
-        for idx, quiz in enumerate(shuffled_quizzes, 1):
+        for idx, quiz in enumerate(selected_quizzes, 1):
             print("---------------------------------")
             print(f"[문제 {idx}]")
 
@@ -198,11 +207,11 @@ class QuizGame:
                 print(f"\nX 오답입니다! (정답: {quiz.answer})")
 
         # 점수 계산
-        percentage = int(score / len(self.quizzes) * 100)
+        percentage = int(score / num_problems * 100)
 
         # 결과 출력
         print("=================================")
-        print(f"결과: {len(self.quizzes)}문제 중 {score}문제 정답!")
+        print(f"결과: {num_problems}문제 중 {score}문제 정답!")
         print(f"점수: {percentage}점")
 
         # 최고점수 갱신
