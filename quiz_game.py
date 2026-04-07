@@ -1,6 +1,7 @@
 # 퀴즈 게임 전체를 관리하는 클래스
 
 import json
+import random
 import os
 from quiz import Quiz 
 
@@ -173,9 +174,14 @@ class QuizGame:
 
         print(f"\n퀴즈를 시작합니다! (총 {len(self.quizzes)}문제)\n")
 
+        # 문제 순서를 랜덤하게 섞기
+        shuffled_quizzes = self.quizzes.copy()
+        random.shuffle(shuffled_quizzes)
+
+
         score = 0
 
-        for idx, quiz in enumerate(self.quizzes, 1):
+        for idx, quiz in enumerate(shuffled_quizzes, 1):
             print("---------------------------------")
             print(f"[문제 {idx}]")
 
