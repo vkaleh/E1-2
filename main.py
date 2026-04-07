@@ -16,12 +16,16 @@ DEFAULT_QUIZZES = [
 
 quizzes = []
 
-# 현재 quizzes 리스트를 JSON 파일로 저장 
-def save_quizzes(quizzes):
+# 현재 quizzes 리스트와 최고점수를를 state.json에 저장 
+def save_quizzes(quizzes, best_score = 0):
     try:
-        data = {"quizzes": [q.to_dict() for q in quizzes]}
+        data = {
+            "quizzes": [q.to_dict() for q in quizzes],
+            "best_score": best_score    
+        }
         with open(DB_FILE, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=4)
+        print("[안내] 데이터가 저장되었습니다.")
     except Exception as e:
         print(f"데이터 저장 중 오류 발생: {e}")
 
@@ -30,22 +34,27 @@ def load_quizzes():
     # 파일이 없는 경우
     if not os.path.exists(DB_FILE):
         print("[안내] 저장된 데이터가 없어 기본 퀴즈를 사용합니다.")
-        return list(DEFAULT_QUIZZES)
+        return list(DEFAULT_QUIZZES), 0
     
     # 파일이 있는 경우 읽기 
     try:
         with open(DB_FILE, "r", encoding="utf-8") as f:
-            data_list = json.load(f)
-        quizzes = [Quiz.from_dict(d) for d in data_list["quizzes"]]
+            data = json.load(f)
+
+        quizzes = [Quiz.from_dict(d) for d in data["quizzes"]]
+        best_score = data.get("best_score", 0)  # 최고점수 없으면 0
+
         print(f"[안내] {len(quizzes)}개의 퀴즈를 불러왔습니다.")
-        return quizzes
+        return quizzes, best_score
+    
     # 3. 파일이 손상되었거나 형식이 잘못된 경우 처리
     except (json.JSONDecodeError, KeyError, TypeError) as e:
         print(f"[경고] 데이터 파일이 손상되어 기본 퀴즈를 사용합니다. ({e})")
-        return list(DEFAULT_QUIZZES)
+        return list(DEFAULT_QUIZZES), 0
+    
     except Exception as e:
         print(f"\n[오류] 예상치 못한 오류 발생: {e}")
-        return list(DEFAULT_QUIZZES)
+        return list(DEFAULT_QUIZZES), 0
 
 
 def show_menu():
@@ -119,8 +128,8 @@ def get_text_input(prompt):
 
 
 def main():
-    global quizzes 
-    quizzes = load_quizzes() or DEFAULT_QUIZZES
+    global quizzes, best_score
+    quizzes, best_score = load_quizzes()
 
     while True:
         show_menu()
@@ -131,7 +140,7 @@ def main():
             continue
 
         if choice == 1:
-            play_quiz()
+            best_score = play_quiz()
 
         elif choice == 2:
             add_quiz()
@@ -140,7 +149,8 @@ def main():
             view_quizzes()
 
         elif choice == 4:
-            print("점수 확인 기능 (아직 구현 안됨)")
+            view_score()
+
         elif choice == 5:
             print("프로그램을 종료합니다.")
             break
@@ -148,11 +158,14 @@ def main():
         input("\n엔터를 누르면 메뉴로 돌아갑니다...")
 
 
+# 퀴즈를 풀고 점수를 계산 
 def play_quiz():
+    global best_score 
+
     # 퀴즈가 없는 경우 처리
     if not quizzes:
         print("등록된 퀴즈가 없습니다.")
-        return
+        return best_score 
 
     print(f"\n퀴즈를 시작합니다! (총 {len(quizzes)}문제)\n")
 
@@ -174,11 +187,22 @@ def play_quiz():
         else:
             print(f"\nX 오답입니다! (정답: {quiz.answer})")
 
+    # 점수 계산
+    percentage = int(score / len(quizzes) * 100)
+
     # 결과 출력
     print("=================================")
     print(f"결과: {len(quizzes)}문제 중 {score}문제 정답!")
-    print(f"점수: {int(score / len(quizzes) * 100)}점")
+    print(f"점수: {percentage}점")
+
+    # 최고점수 갱신
+    if percentage > best_score:
+        best_score = percentage
+        print(f"!!!!!!! 새로운 최고 점수입니다 !!!!!!! ({best_score}점)")
+        save_quizzes(quizzes, best_score)  # 파일에 저장
     print("=================================")
+
+    return best_score
 
 
 def add_quiz():
@@ -206,11 +230,23 @@ def view_quizzes():
         print("등록된 퀴즈가 없습니다.\n")
         return
     
-    print("\n=========저장된 퀴즈 목록=========")
+    print("\n---------저장된 퀴즈 목록---------")
     print(f"총 {len(quizzes)}개\n")
     for idx, quiz in enumerate(quizzes, 1):
         print(f"[{idx}] {quiz.question}\n")
-    print("=================================")
+    print("---------------------------------")
+
+
+def view_score():
+    global best_score 
+
+    print("\n------------최고 점수------------")
+    if best_score == 0:
+        print("아직 퀴즈를 풀지 않았습니다.")
+    else:
+        print(f"최고 점수: {best_score}점")
+    print("---------------------------------")
+
 
 
 if __name__ == "__main__":
