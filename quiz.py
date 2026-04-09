@@ -18,10 +18,11 @@ class Quiz:
         return {
             "question": self.question,
             "choices": self.choices,
-            "answer": self.answer
+            "answer": self.answer,
+            "hint": self.hint
         }
     
     # 딕셔너리 데이터를 기반으로 객체 생성 (JSON 불러오기용)
     @classmethod
     def from_dict(cls, data):
-        return cls(data["question"], data["choices"], data["answer"])
+        return cls(data["question"], data["choices"], data["answer"], data["hint"])
