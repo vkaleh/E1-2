@@ -23,7 +23,8 @@ Python version : 3.12.13
 - 퀴즈 풀기
 - 퀴즈 추가
 - 퀴즈 목록 확인
-- 점수 확인
+- 기록 확인
+- 퀴즈 삭제
 - 종료하기 
 
 ## 5. 파일 구조
@@ -164,7 +165,86 @@ class QuizGame:
 자동화: 데이터 로드/저장을 __init__과 save_quizzes()로 자동화<br>
 재사용성: 게임 객체를 다른 곳에서도 재사용 가능<br>
 
-## 8. 보충 설명 
+<br>
+
+## 8. 결과
+
+### 8-1. 프로그램 실행 결과 
+
+#### 퀴즈 풀기 
+<p>
+<img width="363" height="944" alt="Screenshot 2026-04-09 at 2 53 50 PM" src="https://github.com/user-attachments/assets/8100cfd3-017d-4b44-8aa4-5065a1cdb092" />
+</p>
+
+<br>
+
+#### 퀴즈 추가
+<p>
+<img width="268" height="454" alt="Screenshot 2026-04-09 at 2 55 15 PM" src="https://github.com/user-attachments/assets/3cc85920-27f5-4293-b060-1337cb8c0d4f" />
+</p>
+
+<br>
+
+
+#### 퀴즈 목록 확인
+<p>
+<img width="421" height="451" alt="Screenshot 2026-04-09 at 2 52 05 PM" src="https://github.com/user-attachments/assets/fac98c7c-46da-44e9-8fd7-a9633fe02ae6" />
+</p>
+
+<br>
+
+
+#### 기록 확인
+<p>
+<img width="262" height="355" alt="Screenshot 2026-04-09 at 2 58 23 PM" src="https://github.com/user-attachments/assets/5cd97e93-a75b-497d-9fde-8a93617b1e29" />
+</p>
+
+<p>
+<img width="482" height="424" alt="Screenshot 2026-04-09 at 2 58 38 PM" src="https://github.com/user-attachments/assets/a4ceaf4e-8b50-499f-998d-519d3f67cb57" />
+</p>
+
+<br>
+
+#### 퀴즈 삭제
+<p>
+<img width="419" height="449" alt="Screenshot 2026-04-09 at 3 04 06 PM" src="https://github.com/user-attachments/assets/8ceb0c11-e611-4d1c-9f5f-1322a9c6ed7f" />
+</p>
+
+<p>
+<img width="415" height="462" alt="Screenshot 2026-04-09 at 3 04 22 PM" src="https://github.com/user-attachments/assets/f3a6ea1b-dbf4-49f8-8132-b6543169bdc5" />
+</p>
+
+<p>
+<img width="421" height="436" alt="Screenshot 2026-04-09 at 3 04 31 PM" src="https://github.com/user-attachments/assets/7a3c3df6-e870-4c8b-bc35-66283e452128" />
+</p>
+
+<br>
+
+#### 종료
+
+<p>
+<img width="244" height="211" alt="Screenshot 2026-04-09 at 3 11 21 PM" src="https://github.com/user-attachments/assets/d8df936f-d4eb-4007-8058-d2aa40aa174c" />
+</p>
+<br>
+
+#### 사용자 입력 중단 처리 
+
+<p>
+<img width="665" height="260" alt="Screenshot 2026-04-09 at 3 05 14 PM" src="https://github.com/user-attachments/assets/424c927e-0588-437d-986c-4f9c96d87a01" />
+</p>
+<br>
+
+### 8-2. 커밋 로그 
+```bash
+git log --oneline --graph
+```
+
+<p>
+<img width="559" height="358" alt="Screenshot 2026-04-09 at 2 46 20 PM" src="https://github.com/user-attachments/assets/947eb6b3-dbba-487f-ab17-765c8cfe135d" />
+</p>
+<br>
+
+## 9. 보충 설명 
 
 ### - [git push] VS [git push origin main]
 - **git push** <br>
