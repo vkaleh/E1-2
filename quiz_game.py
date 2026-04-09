@@ -77,7 +77,8 @@ class QuizGame:
         print("2. 퀴즈 추가")
         print("3. 퀴즈 목록")
         print("4. 점수 확인")
-        print("5. 종료")
+        print("5. 퀴즈 삭제")
+        print("6. 종료")
         print()
         print("=================================")
 
@@ -105,6 +106,9 @@ class QuizGame:
                 self.view_score()
 
             elif choice == 5:
+                self.delete_quiz()    
+
+            elif choice == 6:
                 print("프로그램을 종료합니다.")
                 break
 
@@ -289,4 +293,36 @@ class QuizGame:
             print("아직 퀴즈를 풀지 않았습니다.")
         else:
             print(f"최고 점수: {self.best_score}점")
+        print("---------------------------------")
+
+    def delete_quiz(self):
+        # 퀴즈가 없는 경우 처리
+        if not self.quizzes:
+            print("등록된 퀴즈가 없습니다.\n")
+            return
+        
+        print("---------------------------------")
+        print("삭제할 퀴즈를 선택하세요.\n")
+        
+        # 등록된 모든 퀴즈 표시
+        for idx, quiz in enumerate(self.quizzes, 1):
+            print(f"[{idx}] {quiz.question}")
+        
+        # 삭제할 퀴즈 번호 입력받기
+        delete_num = self.get_number_input(
+            f"\n삭제할 퀴즈 번호 (1~{len(self.quizzes)}): ",
+            min_value=1,
+            max_value=len(self.quizzes)
+        )
+        
+        # 확인 메시지
+        deleted_quiz = self.quizzes[delete_num - 1]
+        confirm = input(f"\n'{deleted_quiz.question}'을(를) 삭제하시겠습니까? (y/n): ")
+        
+        if confirm.lower() == 'y':
+            self.quizzes.pop(delete_num - 1)  # 해당 인덱스의 퀴즈 삭제
+            self.save_quizzes()  # 파일에 저장
+            print("\n퀴즈가 삭제되었습니다!")
+        else:
+            print("\n삭제가 취소되었습니다.")
         print("---------------------------------")
