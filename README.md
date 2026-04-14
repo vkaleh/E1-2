@@ -252,3 +252,4 @@ git log --oneline --graph
   그 다음부터는 git push만 해도 origin main으로 감 
 - **git push origin main** <br>
   origin 이라는 서버의 main 브랜치로 보냄. 어느 브랜치에 있든 상관없이 명확하게 타겟을 지정하므로 실수 방지 
+
