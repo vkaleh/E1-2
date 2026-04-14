@@ -8,7 +8,9 @@ JSON을 활용한 데이터 관리, 객체지향 설계, Git을 활용한 버전
 ## 2. 퀴즈 주제, 선정 이유
 **롤토체스(TFT)**
 
-개인적으로 관심 있는 게임을 주제로 선택하여 학습 동기를 높였다.
+개인적으로 관심 있는 게임을 주제로 선택하여 학습 동기를 높였다. <br>
+모두 롤토체스 하세요^^7 
+<br>
 
 ## 3. 실행 방법
 Python version : 3.12.13
@@ -39,6 +41,38 @@ E1-2
 ```
 
 ## 6. 데이터 파일 설명
+### 6-1. 데이터 스키마
+| Key | Type | 설명 |
+|:---:|:---:|:---:|
+| **quizzes** | Array | 게임에 사용될 퀴즈 문제들의 리스트 |
+| **best_score** | Integer | 사용자가 달성한 역대 최고 점수 |
+| **history** | Array | 과거 게임 플레이 결과들의 로그 리스트 |
+<br>
+
+### 6-2. Quizzes 내부 구조 
+| Key | Type | 설명 |
+|:---:|:---:|:---:|
+| **question** | String | 퀴즈 문제의 텍스트 내용 |
+| **choices** | Array | 선택지 리스트 (4지선다 형식) |
+| **answer** | Integer | 정답 인덱스 번호 |
+| **hint** | String | 문제 풀이에 도움을 주는 힌트 텍스트 |
+<br>
+
+### 6-3. History 내부 구조
+플레이가 종료될 때마다 아래 기록이 누적됨 
+| Key | Type | 설명 |
+|:---:|:---:|:---:|
+| **timestamp** | String | 게임이 종료된 시각 (YYYY-MM-DD HH:MM:SS) |
+| **num_problems** | Integer | 해당 회차에 출제된 총 문제 수 |
+| **correct_count** | Integer | 사용자가 맞힌 정답 개수 |
+| **score** | Integer | 백분율로 계산된 최종 점수 |
+| **is_best** | Boolean | 해당 기록의 최고 점수 경신 여부 |
+<br>
+
+### 6-4. 데이터 파일의 역할
+프로그램이 꺼져도 상태를 유지하게 해주고 <br>
+로직과 데이터를 분리해서 유지보수성을 높임 
+<br>
 
 ## 7. 구현 순서
 
@@ -244,6 +278,28 @@ git log --oneline --graph
 </p>
 <br>
 
+### 8-3. Git 저장소 복제 실습 
+#### git clone 
+<p>
+ <img width="560" height="114" alt="Screenshot 2026-04-14 at 10 53 16 AM" src="https://github.com/user-attachments/assets/01d97012-07d3-4cd6-ab05-e769fcad54b7" />
+</p>
+<br>
+
+#### 복제된 저장소에서 변경
+<p>
+<img width="564" height="98" alt="Screenshot 2026-04-14 at 11 01 36 AM" src="https://github.com/user-attachments/assets/9c2a6211-c0e9-4388-a77d-f5acaef66492" />
+</p>
+<p>
+<img width="486" height="140" alt="Screenshot 2026-04-14 at 11 19 30 AM" src="https://github.com/user-attachments/assets/6a2a2c1d-0ab5-4525-9b23-36b8199e8892" />
+</p>
+<br>
+
+### 작업하던 로컬 디렉토리에서 pull로 변경사항 가져옴 
+<p>
+<img width="561" height="294" alt="Screenshot 2026-04-14 at 11 21 30 AM" src="https://github.com/user-attachments/assets/23c84a24-4c8b-495a-ac95-647b6df74d48" />
+</p>
+<br>
+
 ## 9. 보충 설명 
 
 ### - [git push] VS [git push origin main]
@@ -252,4 +308,3 @@ git log --oneline --graph
   그 다음부터는 git push만 해도 origin main으로 감 
 - **git push origin main** <br>
   origin 이라는 서버의 main 브랜치로 보냄. 어느 브랜치에 있든 상관없이 명확하게 타겟을 지정하므로 실수 방지 
-
