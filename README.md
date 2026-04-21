@@ -307,4 +307,61 @@ git log --oneline --graph
   미리 연결된 곳으로 푸시. 맨 처음에 git push -u origin main을 해두었다면
   그 다음부터는 git push만 해도 origin main으로 감 
 - **git push origin main** <br>
-  origin 이라는 서버의 main 브랜치로 보냄. 어느 브랜치에 있든 상관없이 명확하게 타겟을 지정하므로 실수 방지 
+  origin 이라는 서버의 main 브랜치로 보냄. 어느 브랜치에 있든 상관없이 명확하게 타겟을 지정하므로 실수 방지
+<p align="center">&nbsp;</p>
+
+### - 클래스의 역할과 책임 
+역할 : 클래스명 (예: 학생) <br>
+책임 : 클래스의 기능 <br>
+역할 안에 여러 책임이 있다고 볼 수 있음 <br>
+
+클래스 없이 함수만으로 기능 구현은 가능하겠지만, 관련 데이터를 묶어줄 객체가 없게 됨 <br>
+그래서 매개변수로 값을 매번 넘겨줘야 함
+<p align="center">&nbsp;</p>
+
+### - @staticmethod 와 @classmethod 
+| 특징 | staticmethod | classmethod | 
+|:---:|:---:|:---:|
+| **첫 번째 인자** | 없음 | cls |
+| **클래스 변수 접근** | 불가능 | 가능 |
+| **주 사용 목적** | 유틸리티/헬퍼 기능 | 대안 생성자/클래스 변수 수정 |
+| **상속 시 동작** | 클래스 정보가 없어서, 어디서 호출해도 동일한 동작 | cls가 자식 클래스로 자동 변경되어 동작 |
+
+둘다 클래스명.함수명()으로 바로 호출해서 사용한다는 점은 같음 <br>
+
+staticmethod는 주로 클래스와 관련있지만, 객체 생성할 필요가 없을 때 주로 기능 관련으로 많이 사용함 <br>
+일반 클래스 함수에는 첫번째 매개변수로 self를 적지만, staticmethod에서는 적지 않음 <br>
+<p align="center">&nbsp;</p>
+
+### - JSON 특징
+- 데이터 크기가 커질수록 성능저하가 일어나는 이유 : 파일 전체를 처음부터 다 읽고, 중간에 멈출 수 없음
+또, 파싱된 데이터 전체를 메모리에 올려야 함 <br>
+<p align="center">&nbsp;</p>
+
+### - JSON 파일 손상을 막기 위한 방법
+- JSON Lines
+```bash
+# 스트리밍 방식 — 한 줄씩 읽기
+import jsonlines
+
+with open("data.jsonl") as f:
+    for line in f:
+        item = json.loads(line)   # 한 줄씩 파싱
+        process(item)             # 처리 후 메모리 해제
+        # 전체를 메모리에 올리지 않음 
+```
+<br>
+
+- Atomic Write
+```bash
+import os
+import json
+
+def save_state_safe(data):
+    # 1단계: 임시 파일에 완전히 씀
+    with open("state.tmp", "w") as f:
+        json.dump(data, f)
+    
+    # 2단계: 완성됐으면 그때 교체
+    os.replace("state.tmp", "state.json")
+```
